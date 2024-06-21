@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streams-app-deployment
+  namespace: probe-file
+  labels:
+    app: streams-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streams-app
+  template:
+    metadata:
+      labels:
+        app: streams-app
+    spec:
+      hostNetwork: true
+      containers:
+      - name: streams-app
+        image: devjyk/streams-app:1.0
+        env:
+        - name: APP_NAME
+          value: "streams-app"
+        - name: KAFKA_BROKER
+          value: "localhost:9092"
+        - name: KAFKA_SINK_TOPICS
+          value: "dynamic-partition-forwarder-app-typeA,dynamic-partition-forwarder-app-typeB,dynamic-partition-forwarder-app-typeC"
+        - name: KAFKA_SOURCE_TOPICS
+          value: "streams\\-.*input"
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
