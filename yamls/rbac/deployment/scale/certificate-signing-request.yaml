@@ -1,0 +1,22 @@
+# openssl genrsa -out rbac-user.key 2048
+# openssl req -new -key rbac-user.key -out rbac-user.csr -subj "/CN=rbac-user/O=rbac-test"
+# 
+# CSR_BASE64=$(cat rbac-user.csr | base64 | tr -d '\n')
+# sed "s|<BASE64_ENCODED_CSR>|$CSR_BASE64|g" certificate-signing-request.yaml > certificate-signing-request.yaml
+
+
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: rbac-user
+spec:
+  groups:
+  - system:authenticated
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ2JUQ0NBVlVDQVFBd0tERVNNQkFHQTFVRUF3d0pjbUpoWXkxMWMyVnlNUkl3RUFZRFZRUUtEQWx5WW1GagpMWFJsYzNRd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURQRTNPVUxjeENJaVVRCjFaUEMxblczTWxCdXpUdkpNSnBHUUEwRm5ycVJDeDJ4WUJyV0Y4SGxkbm5XT2FsZlBSdEM4eGh0ODlxcnlFdm8Ka3k5OHo5TDdNRDFmd1pNTlduMDB4VGRiVFVPQ0liYm8rcUdIMUFITXdLaUEwNVdXNUpzVW8zQzM4NjR3VWdBaQpMRHUzWlN2ZndyMkI3eExjdjVVMm5CellXendyM1VVZUpMRkdWTElBV2hLMzc0YWlja2ppeThreDhaRnNraXhhCkVXWWp3MTVFdUlmaG1qUEdLdUEyaXJRM1VLOFBNckxKcFQ3TlJVWE9INW1JcEl5Mi95VmZ3cHdLYXRpRU1sRkgKclVZL0RPRUtLZnRBVEtkQmlGdmF3T252bEJ2aTArQ0tqbkhEQUhGdEFmUjJTU09ockJqdlVpUGhCNURLaThaVApDL0puUWVXUEFnTUJBQUdnQURBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQWNUZG1naGxFMVRndkxWR3IwU1BqCnVDK2dxcXRDNG5ONHREUno0aDNMeDYraUhvTjVPSjQ0bjRSYTJ2MGhkYTF6Ti9HVUtOYndaVmtoTWJBS2ZhRlAKZlRnaGgwWWIyU0F5aURYT3NqNzBSblF2dU9lM1ZaSnl2ZHhCdEEwS0tvWnpWWm9KMlFsZytrMitNWWF4Ry9pMwpvWFFieTVVL1BXUnBJSUhLN1FBQjZ4bzhBVHdHbW0rT1Q0SHJ3c2ZyVTBZMUVXbkhlNnJNcnNkeUJMYWZLYkZnCml6WkdmWWhHNGlhMDhtaFFCQzIvRWpNZFZSQThVaG1vRlhtMlFCWFFYQ3Jna3dlUXFWQk51SUUyYUZiRzNGZi8KcmhZZWFVNlB6dDRnOFpzRmlBK0pIb2pOaWlkUVBMZEMxQ0dKem9KOUdtUzRHNnRqakk2dHMyYStjeDMyMVhzVApXZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+  - client auth
+
+
+# kubectl certificate approve rbac-user
+# kubectl get csr rbac-user -o jsonpath='{.status.certificate}' | base64 --decode > rbac-user.crt
