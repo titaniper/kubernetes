@@ -18,7 +18,7 @@ spec:
       hostNetwork: true
       containers:
       - name: streams-app
-        image: devjyk/streams-app:1.0
+        image: devjyk/streams-app:1.2
         env:
         - name: APP_NAME
           value: "streams-app"
