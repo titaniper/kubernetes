@@ -1,0 +1,28 @@
+apiVersion: v1
+clusters:
+  - cluster:
+      server: https://api-ben-stage-k8s.ben.com
+    name: cluster-name
+contexts:
+  - context:
+      cluster: server-name
+      user: cluster-name-aws-developer
+    name: ben-stage.k8s.local-kafka
+current-context: ben-stage.k8s.local-kafka
+kind: Config
+preferences: {}
+users:
+  - name: cluster-name-aws-developer
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        args:
+          - token
+          - -i
+          - 2232ew2323232312121212121w1212
+        command: aws-iam-authenticator
+        env:
+          - name: AWS_PROFILE
+            value: ben-aws-admin
+        interactiveMode: IfAvailable
+        provideClusterInfo: false

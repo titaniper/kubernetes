@@ -1,0 +1,3 @@
+[profile ben-aws-admin]
+credential_process = gsts --no-credentials-cache --cache-dir ~/.aws --username jy.kang@ben.com --aws-role-arn arn:aws:iam::232321212121:role/GoogleSAMLDeveloperRole --aws-region=us-west-2 --sp-id 3434343434 --idp-id 23DHAWE452C --json --verbose
+region             = us-west-2
