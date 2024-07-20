@@ -1,0 +1,3 @@
+[submodule "projects/tenant-operator"]
+	path = projects/tenant-operator
+	url = git@github.com:titaniper/tenant-operator.git
